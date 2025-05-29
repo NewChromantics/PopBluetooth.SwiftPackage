@@ -166,6 +166,13 @@ public class BluetoothPeripheral : NSObject, CBPeripheralManagerDelegate, Observ
 			throw BluetoothError("No such [mutable] characteristic \(characteristic) on service \(service)")
 		}
 		
+		if let firstSubscriber = char.subscribedCentrals?.first
+		{
+			if value.count > firstSubscriber.maximumUpdateValueLength
+			{
+				throw BluetoothError("Data x\(value.count) longer than max size x\(firstSubscriber.maximumUpdateValueLength) (first subscriber)")
+			}
+		}
 		
 		if let peer
 		{
